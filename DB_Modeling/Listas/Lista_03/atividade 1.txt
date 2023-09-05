@@ -1,0 +1,40 @@
+CREATE DATABASE controle_de_livros;
+
+USE controle_de_livros;
+
+CREATE TABLE editoras(
+    id_editora INT,
+    nome VARCHAR(255),
+    PRIMARY KEY (id_editora)
+);
+
+CREATE TABLE autores(
+    id_autor INT,
+    nome VARCHAR(255),
+    PRIMARY KEY (id_autor)
+);
+
+CREATE TABLE livros(
+    id_livro INT,
+    nome VARCHAR(255),
+    publicacao DATE,
+    id_editora INT,
+    id_autor INT,
+    PRIMARY KEY (id_livro),
+    CONSTRAINT fk_editora FOREIGN KEY (id_editora) REFERENCES editoras(id_editora),
+    CONSTRAINT fk_autor FOREIGN KEY (id_autor) REFERENCES autores(id_autor)
+);
+
+CREATE TABLE categorias(
+    id_categoria INT,
+    nome VARCHAR(255),
+    PRIMARY KEY (id_categoria)
+);
+
+CREATE TABLE livro_categoria(
+    id_livro INT,
+    id_categoria INT,
+    PRIMARY KEY (id_livro, id_categoria),
+    CONSTRAINT fk_livro FOREIGN KEY (id_livro) REFERENCES livros(id_livro),
+    CONSTRAINT fk_categoria FOREIGN KEY (id_categoria) REFERENCES categorias(id_categoria)
+);

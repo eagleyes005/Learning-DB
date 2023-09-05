@@ -1,0 +1,48 @@
+CREATE DATABASE escola;
+
+USE escola;
+
+CREATE TABLE professores (
+    id_professor INT,
+    nome VARCHAR(100),
+    PRIMARY KEY (id_professor)
+);
+
+CREATE TABLE turmas (
+    id_turma INT,
+    sala INT,
+    PRIMARY KEY (id_turma)
+);
+
+CREATE TABLE alunos (
+    id_aluno INT,
+    nome VARCHAR(100),
+    id_turma INT,
+    PRIMARY KEY (id_aluno),
+    CONSTRAINT fk_turma FOREIGN KEY (id_turma) REFERENCES turmas(id_turma)
+);
+
+CREATE TABLE professores_turmas (
+    id_professor INT,
+    id_turma INT,
+    PRIMARY KEY (id_professor, id_turma),
+    CONSTRAINT fk_professor_turma FOREIGN KEY (id_professor) REFERENCES professores(id_professor),
+    CONSTRAINT fk_turma_professor FOREIGN KEY (id_turma) REFERENCES turmas(id_turma)
+);
+
+CREATE TABLE aulas (
+    id_aula INT,
+    horario_inicio TIME,
+    horario_fim TIME,
+    id_professor INT,
+    PRIMARY KEY (id_aula),
+    CONSTRAINT fk_professor FOREIGN KEY (id_professor) REFERENCES professores(id_professor)
+);
+
+CREATE TABLE alunos_aulas (
+    id_aluno INT,
+    id_aula INT,
+    PRIMARY KEY (id_aluno, id_aula),
+    CONSTRAINT fk_aluno_aula FOREIGN KEY (id_aluno) REFERENCES alunos(id_aluno),
+    CONSTRAINT fk_aula_aluno FOREIGN KEY (id_aula) REFERENCES aulas(id_aula)
+);

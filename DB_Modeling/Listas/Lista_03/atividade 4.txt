@@ -1,0 +1,45 @@
+CREATE DATABASE eleicao;
+
+USE eleicao;
+
+CREATE TABLE cargos (
+    codigo_cargo INT,
+    nome_cargo VARCHAR(30) UNIQUE NOT NULL CHECK ( nome_cargo != 'Prefeito' && nome_cargo != 'Vereador' ),
+    salario FLOAT NOT NULL DEFAULT (17000.00),
+    numero_vagas INT UNIQUE NOT NULL,
+    PRIMARY KEY (codigo_cargo)
+);
+
+CREATE TABLE partidos (
+    codigo_partido INT,
+    sigla CHAR(5) UNIQUE NOT NULL,
+    nome VARCHAR(40) UNIQUE NOT NULL,
+    numero INT UNIQUE NOT NULL,
+    PRIMARY KEY (codigo_partido)
+);
+
+CREATE TABLE candidatos (
+    numero_candidato INT,
+    nome VARCHAR(40) UNIQUE NOT NULL,
+    codigo_cargo INT,
+    codigo_partido INT,
+    PRIMARY KEY (numero_candidato),
+    CONSTRAINT fk_cargo FOREIGN KEY (codigo_cargo) REFERENCES cargos(codigo_cargo),
+    CONSTRAINT fk_partido FOREIGN KEY (codigo_partido) REFERENCES partidos(codigo_partido)
+);
+
+CREATE TABLE eleitores (
+    titulo_eleitor VARCHAR(30),
+    zona_eleitoral CHAR(5) NOT NULL,
+    sessao_eleitoral CHAR(5) NOT NULL,
+    nome VARCHAR(40) NOT NULL,
+    PRIMARY KEY (titulo_eleitor)
+);
+
+CREATE TABLE votos (
+    titulo_eleitor VARCHAR(30),
+    numero_candidato INT,
+    PRIMARY KEY (titulo_eleitor, numero_candidato),
+    CONSTRAINT fk_eleitor_candidato FOREIGN KEY (titulo_eleitor) REFERENCES eleitores(titulo_eleitor),
+    CONSTRAINT fk_candidato_eleitor FOREIGN KEY (numero_candidato) REFERENCES candidatos(numero_candidato)
+);

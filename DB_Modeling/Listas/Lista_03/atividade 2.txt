@@ -1,0 +1,70 @@
+CREATE DATABASE controle_industria;
+
+USE controle_industria;
+
+CREATE TABLE departamentos (
+    id_departamento INT,
+    setor VARCHAR(100),
+    PRIMARY KEY (id_departamento)
+);
+
+CREATE TABLE depositos (
+    id_deposito INT,
+    endereco VARCHAR(255),
+    PRIMARY KEY (id_deposito)
+);
+
+CREATE TABLE pecas (
+    id_peca INT,
+    peso FLOAT,
+    cor VARCHAR(50),
+    id_deposito INT,
+    PRIMARY KEY (id_peca),
+    CONSTRAINT fk_deposito FOREIGN KEY (id_deposito) REFERENCES depositos(id_deposito)
+);
+
+CREATE TABLE fornecedores (
+    id_fornecedor INT,
+    endereco VARCHAR(255),
+    PRIMARY KEY (id_fornecedor)
+);
+
+CREATE TABLE projetos (
+    id_projeto INT,
+    orcamento FLOAT(10,2),
+    PRIMARY KEY (id_projeto)
+);
+
+CREATE TABLE funcionarios (
+    id_funcionario INT,
+    salario FLOAT(10,2),
+    telefone VARCHAR(20),
+    id_departamento INT,
+    PRIMARY KEY (id_funcionario),
+    CONSTRAINT fk_departamento FOREIGN KEY (id_departamento) REFERENCES departamentos(id_departamento)
+);
+
+CREATE TABLE projeto_funcionario (
+    id_projeto INT,
+    id_funcionario INT,
+    PRIMARY KEY (id_projeto, id_funcionario),
+    CONSTRAINT fk_projeto_funcionario FOREIGN KEY (id_projeto) REFERENCES projetos(id_projeto),
+    CONSTRAINT fk_funcionario_projeto FOREIGN KEY (id_funcionario) REFERENCES funcionarios(id_funcionario)
+);
+
+CREATE TABLE projeto_peca (
+    id_projeto INT,
+    id_peca INT,
+    PRIMARY KEY (id_projeto, id_peca),
+    CONSTRAINT fk_projeto_peca FOREIGN KEY (id_projeto) REFERENCES projetos(id_projeto),
+    CONSTRAINT fk_peca_projeto FOREIGN KEY (id_peca) REFERENCES pecas(id_peca)
+);
+
+CREATE TABLE peca_fornecedor (
+    id_peca INT,
+    id_fornecedor INT,
+    PRIMARY KEY (id_peca, id_fornecedor),
+    CONSTRAINT fk_peca_fornecedor FOREIGN KEY (id_peca) REFERENCES pecas(id_peca),
+    CONSTRAINT fk_fornecedor_peca FOREIGN KEY (id_fornecedor) REFERENCES fornecedores(id_fornecedor)
+);
+
